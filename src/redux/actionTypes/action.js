@@ -1,4 +1,4 @@
-import { ADD_TOKEN } from './actionTypes';
+import { ADD_TOKEN, REMOVE_TOKEN } from './actionTypes';
 
 export const addToken = (token) => {
   return {
@@ -6,3 +6,9 @@ export const addToken = (token) => {
     payload: token,
   };
 };
+
+export const removeToken=()=>{
+    return{
+        type:REMOVE_TOKEN
+    };
+}

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { styled } from '@mui/system';
 import PinkCircleWithLockIcon from '../LockIcon/PinkCircleWithLockIcon';
 import { addToken } from '../../redux/actionTypes/action';
-
+import { useNavigate } from 'react-router-dom';
 
 const PageContainer = styled('div')({
     display: 'flex',
@@ -33,6 +33,7 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -46,6 +47,7 @@ function LoginPage() {
             console.log(response)
             if(response.data.token){
               dispatch(addToken(response.data.token))
+              navigate('/products'); 
             }
           })
           .catch((error) => {

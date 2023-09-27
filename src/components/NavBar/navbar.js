@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-
+import { useSelector } from 'react-redux';
+import { removeToken } from '../../redux/actionTypes/action';
+import { useDispatch } from 'react-redux';
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -46,8 +48,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); 
-    
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
+  const dispatch = useDispatch();
     return (
         <AppBar position="static" sx={{ backgroundColor: '#3f51B5' }}>
         <Toolbar>
@@ -70,7 +72,8 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 1 }} /> 
   
           {/* Login and Signup Links */}
-          <Button 
+          {!isLoggedIn && (
+        <> <Button 
             color="inherit" 
             component={Link} 
             to="/login" 
@@ -81,6 +84,19 @@ const Navbar = () => {
           <Button color="inherit" component={Link} to="/signup">
             Signup
           </Button>
+          </>)
+}
+
+          {isLoggedIn && (
+        <Button 
+          color="inherit"
+          to="/login"
+          component={Link} 
+          onClick={() =>  dispatch(removeToken())} 
+        >
+          Logout
+        </Button>
+      )}
         </Toolbar>
       </AppBar>
     );
