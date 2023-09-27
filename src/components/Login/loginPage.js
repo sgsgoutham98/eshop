@@ -2,7 +2,31 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'axios'; 
+import { styled } from '@mui/system';
+import PinkCircleWithLockIcon from '../LockIcon/PinkCircleWithLockIcon';
+
+
+const PageContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '70vh', 
+  });
+
+  const CustomTextField = styled(TextField)({
+    width: '100%',
+
+   // marginLeft:'150px'
+  });
+
+  const CustomButton = styled(Button)({
+    width: '100%',
+//marginLeft:'150px'
+backgroundColor: '#3f51B5'
+  });
+ 
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -25,12 +49,14 @@ function LoginPage() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto', padding: '20px' }}>
+        <React.Fragment>
+        <PageContainer>
+        <PinkCircleWithLockIcon />
             <Typography variant="h5" gutterBottom>
                 Sign In
             </Typography>
-            <form onSubmit={handleSubmit}>
-                <TextField
+            <form onSubmit={handleSubmit} style={{width:'30%'}}>
+                <CustomTextField
                     variant="outlined"
                     margin="normal"
                     required
@@ -42,7 +68,7 @@ function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <TextField
+                <CustomTextField
                     variant="outlined"
                     margin="normal"
                     required
@@ -55,20 +81,20 @@ function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button
+                <CustomButton
                     type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
-                    style={{ margin: '20px 0' }}
                 >
                     Sign In
-                </Button>
+                </CustomButton>
             </form>
             <Typography variant="body2" align="center">
                 Don't have an account? <Link to="/signup">Sign Up</Link>
             </Typography>
-        </div>
+            </PageContainer>
+        </React.Fragment>
     );
 }
 

@@ -1,45 +1,90 @@
-
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Button, TextField } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Button, Box } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link } from 'react-router-dom';
+import { styled, alpha } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+
+const Search = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),  // add margin to left for centering
+    width: "50%", 
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: theme.spacing(3),
+      width: "auto",
+    },
+  }));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
+}));
 
 const Navbar = () => {
-    const [filterText, setFilterText] = useState('');
-
-    const handleFilterChange = (e) => {
-        setFilterText(e.target.value);
-      
-    };
-
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    
     return (
-        <AppBar position="static">
-            <Toolbar>
-      
-                <IconButton edge="start" color="inherit" component={Link} to="/">
-                    <ShoppingCartIcon />
-                </IconButton>
-
-                <div style={{ flexGrow: 1, marginLeft: '20px' }}>
-                    <TextField 
-                        variant="outlined" 
-                        size="small" 
-                        label="Filter" 
-                        value={filterText} 
-                        onChange={handleFilterChange} 
-                    />
-                </div>
-
-                {/* Login and Signup Links */}
-                <Button color="inherit" component={Link} to="/login">
-                    Login
-                </Button>
-                <Button color="inherit" component={Link} to="/signup">
-                    Signup
-                </Button>
-            </Toolbar>
-        </AppBar>
+        <AppBar position="static" sx={{ backgroundColor: '#3f51B5' }}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" component={Link} to="/">
+            <ShoppingCartIcon />
+          </IconButton>
+  
+          <Box sx={{ flexGrow: 1 }} />  
+  
+    
+          {isLoggedIn && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase placeholder="Search…" />
+            </Search>
+          )}
+  
+          <Box sx={{ flexGrow: 1 }} /> 
+  
+          {/* Login and Signup Links */}
+          <Button 
+            color="inherit" 
+            component={Link} 
+            to="/login" 
+          //  onClick={() => setIsLoggedIn(!isLoggedIn)}  
+          >
+            Login
+          </Button>
+          <Button color="inherit" component={Link} to="/signup">
+            Signup
+          </Button>
+        </Toolbar>
+      </AppBar>
     );
-};
-
-export default Navbar;
+  };
+  
+  export default Navbar;
+  
