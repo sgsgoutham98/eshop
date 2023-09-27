@@ -1,10 +1,11 @@
-
+import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios'; 
 import { styled } from '@mui/system';
 import PinkCircleWithLockIcon from '../LockIcon/PinkCircleWithLockIcon';
+import { addToken } from '../../redux/actionTypes/action';
 
 
 const PageContainer = styled('div')({
@@ -32,16 +33,20 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const dispatch = useDispatch();
     const handleSubmit = (event) => {
         event.preventDefault();
         const requestData = {
             username: email,
             password: password,
           };
-      
+          
           axios.post('http://localhost:8080/api/auth/signin', requestData)
           .then((response) => {
-            setToken(response.token)
+            console.log(response)
+            if(response.data.token){
+              dispatch(addToken(response.data.token))
+            }
           })
           .catch((error) => {
             console.error('Error:', error);
