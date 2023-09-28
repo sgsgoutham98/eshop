@@ -19,12 +19,10 @@ const PageContainer = styled('div')({
   const CustomTextField = styled(TextField)({
     width: '100%',
 
-   // marginLeft:'150px'
   });
 
   const CustomButton = styled(Button)({
     width: '100%',
-//marginLeft:'150px'
 backgroundColor: '#3f51B5'
   });
  

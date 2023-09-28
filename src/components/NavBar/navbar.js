@@ -16,7 +16,7 @@ const Search = styled("div")(({ theme }) => ({
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2),  // add margin to left for centering
+    marginLeft: theme.spacing(2), 
     width: "50%", 
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
@@ -71,13 +71,11 @@ const Navbar = () => {
   
           <Box sx={{ flexGrow: 1 }} /> 
   
-          {/* Login and Signup Links */}
           {!isLoggedIn && (
         <> <Button 
             color="inherit" 
             component={Link} 
             to="/login" 
-          //  onClick={() => setIsLoggedIn(!isLoggedIn)}  
           >
             Login
           </Button>

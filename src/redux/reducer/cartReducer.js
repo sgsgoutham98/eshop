@@ -2,7 +2,11 @@ import { ADD_TOKEN,REMOVE_TOKEN } from "../actionTypes/actionTypes";
 
 const initialState = {
   token: "",
-  isLoggedIn: false
+  isLoggedIn: false,
+  categories: [],
+  products:[],
+  productsSortOrder:"default"
+
 };
 
 const cartReducer = (state = initialState, action) => {
