@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button, Typography, Container } from '@mui/material';
-import { Link } from 'react-router-dom';
-
+import React, { useState } from "react";
+import axios from "axios";
+import { TextField, Button, Typography, Container } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function SignupComponent() {
-
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    contactNumber: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    contactNumber: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8080/api/auth/signup', formData)
+    axios
+      .post("http://localhost:8080/api/auth/signup", formData)
       .then((response) => {
-    
-        console.log('SignUp successful!', response.data);
+        console.log("SignUp successful!", response.data);
       })
       .catch((error) => {
-     
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
   };
 
@@ -34,8 +31,8 @@ function SignupComponent() {
   };
 
   return (
-    <Container component="main" maxWidth="xs" >
-      <form onSubmit={handleSubmit} >
+    <Container component="main" maxWidth="xs">
+      <form onSubmit={handleSubmit}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -99,12 +96,7 @@ function SignupComponent() {
           value={formData.contactNumber}
           onChange={handleInputChange}
         />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-        >
+        <Button type="submit" fullWidth variant="contained" color="primary">
           Sign Up
         </Button>
       </form>

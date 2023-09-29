@@ -1,4 +1,4 @@
-import { ADD_TOKEN, REMOVE_TOKEN } from './actionTypes';
+import { ADD_TOKEN, REMOVE_TOKEN,ADD_PRODUCT } from './actionTypes';
 
 export const addToken = (token) => {
   return {
@@ -12,3 +12,20 @@ export const removeToken=()=>{
         type:REMOVE_TOKEN
     };
 }
+
+export const filterProducts = (category) => ({
+  type: 'FILTER_PRODUCTS',
+  category,
+});
+
+export const searchProducts = (search) => ({
+  type: 'SEARCH_PRODUCTS',
+  search,
+});
+
+export const addProduct = product => {
+  return {
+    type: ADD_PRODUCT,
+    payload: product
+  };
+};
