@@ -13,8 +13,18 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { useDispatch } from "react-redux";
-import { filterProducts } from "../../redux/actionTypes/action";
+import { useAxios } from "../../API/axios";
+import {
+  filterProducts,
+  deleteProduct,
+  updateProduct,
+  setProducts
+} from "../../redux/actionTypes/action";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ADD_PRODUCT,SET_PRODUCTS } from "../../redux/actionTypes/actionTypes";
 
 const ProductDisplay = () => {
   const categories = [
@@ -25,17 +35,57 @@ const ProductDisplay = () => {
     { id: 5, name: "PERSONAL CARE" },
   ];
   let sortOrder = "";
-
   const dispatch = useDispatch();
+  const HTTP = useAxios();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isAdmin = useSelector((state) => state.isAdmin);
   let filteredProducts = useSelector((state) => state.filteredProducts);
+
   const handleToggleTab = (event, newCategory) => {
-    console.log("clicked " + newCategory);
     dispatch(filterProducts(newCategory));
   };
 
+  const fetchAndAddProducts = async() => {
+   await HTTP.get("/api/products")
+      .then((response) => {
+        console.log("Before dispatch"+JSON.stringify(response.data));
+        dispatch(setProducts(response.data));
+        console.log("After dispatch")
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  };
+
+  const navigate = useNavigate();
+  const handleEdit = (id) => {
+    // Your code to handle edit.
+    // For example, redirect to the EditProductForm component with the product ID as a parameter.
+
+    navigate(`/edit-product/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    // Your code to handle delete.
+    // For example, dispatch an action to remove the product from the store.
+
+    HTTP.delete(`/api/products/${id}`)
+    .then((response) => {
+      dispatch(deleteProduct(id));
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
+   
+  };
   useEffect(() => {
-    dispatch(filterProducts("ALL"));
+    console.log("RUnning useEffect")
+    fetchAndAddProducts();
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(filterProducts("ALL"));
+  // }, []);
   //const ProductList=products
   // useEffect(() => {
   //   //axios.get("/products/categories").then((response) => {});
@@ -105,36 +155,74 @@ const ProductDisplay = () => {
       </div>
 
       <div>
-        <Grid container spacing={2}>
-          {filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Card sx={{ maxWidth: 400 }}>
-                <CardMedia
-                  sx={{ height: "240px", objectFit: "contain" }}
-                  key={product.id}
-                  image={product.imageUrl}
-                  title={product.name}
-                />
-                <CardContent
-                  style={{
-                    height: "90px",
-                    maxHeight: "100px",
-                    overflow: "auto",
-                  }}
-                >
-                  <Typography gutterBottom variant="h5" component="div">
-                    {product.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {product.description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Buy</Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+        <Grid container spacing={2} marginLeft="10px">
+          {filteredProducts &&
+            filteredProducts.length > 0 &&
+            filteredProducts.map((product) => (
+              <Grid item xs={12} sm={6} md={4} key={product.id}>
+                <Card sx={{ maxWidth: 400 }}>
+                  <CardMedia
+                    sx={{ height: "240px", objectFit: "contain" }}
+                    key={product.id}
+                    image={product.imageUrl}
+                    title={product.name}
+                  />
+                  <CardContent
+                    style={{
+                      height: "90px",
+                      maxHeight: "100px",
+                      overflow: "auto",
+                    }}
+                  >
+                    <Typography gutterBottom variant="h5" component="div">
+                      {product.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {product.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions style={{ position: "relative" }}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      style={{ background: "#3f51b5" }}
+                    >
+                      Buy
+                    </Button>
+
+                    {isLoggedIn && isAdmin && (
+                      <>
+                        <div
+                          style={{
+                            position: "absolute",
+                            right: 0,
+                            display: "flex",
+                            padding: "10px",
+                          }}
+                        >
+                          <EditIcon
+                            style={{
+                              color: "#757575",
+                              justifyContent: "flex-end",
+                              paddingRight: "10px",
+                            }}
+                            onClick={(e) => handleEdit(product.id)}
+                          />
+
+                          <DeleteIcon
+                            style={{
+                              color: "#757575",
+                              justifyContent: "flex-end",
+                            }}
+                            onClick={(e) => handleDelete(product.id)}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       </div>
     </div>

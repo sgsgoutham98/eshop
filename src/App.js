@@ -7,6 +7,7 @@ import AddProductForm from './components/Products/addProductPage';
 import AdminSignupComponent from './components/SignUp/adminSignupPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/Home/homePage';
+import EditProductForm from './components/Products/EditProductPage';
 import './App.css';
 function Login() {
     return <><LoginPage/></>
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/signup" element={<SignupComponent />} />
                     <Route path="/products" element={<Products/>} />
                     <Route path="/addproduct" element={<AddProductForm/>}/>
+                    <Route path="/edit-product/:id" element={<EditProductForm />}/>
                     <Route path="/admin/signup" element={<AdminSignupComponent />} />
                 </Routes>
             </div>

@@ -1,41 +1,62 @@
-// AddProductForm.js
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/actionTypes/action";
+// EditProductForm.js
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProduct } from "../../redux/actionTypes/action";
 import { TextField, Button, Box, Select, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { useAxios } from "../../API/axios";
 
 
-const AddProductForm = () => {
-  const axios = useAxios();
+const EditProductForm = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const HTTP = useAxios();
+  const product = useSelector((state) => state.allProducts.find((p) => p.id === id));
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    manufacturer: "",
-    availableItems: "",
-    imageUrl: "",
+    id: product.id,
+    name: product.name,
+    manufacturer:product.manufacturer,
+    availableItems:product.availableItems,
+    imageUrl:product.imageUrl,
+    category:product.category,
+    price:product.price,
+    description:product.description
   });
 
-  const isFormValid = () => {
-    return (
-      formData.name.trim() !== "" &&
-      formData.price.trim() !== "" &&
-      formData.category.trim() !== "" &&
-      formData.description.trim() !== "" &&
-      formData.manufacturer.trim() !== "" &&
-      formData.availableItems.trim() !== "" &&
-      formData.imageUrl.trim() !== ""
-    );
+  useEffect(() => {
+
+    console.log(product)
+    if (product) {
+      setFormData({
+        id: product.id,
+        name: product.name,
+        manufacturer:product.manufacturer,
+        availableItems:product.availableItems,
+        imageUrl:product.imageUrl,
+        category:product.category,
+        price:product.price,
+        description:product.description
+
+        
+      });
+    }
+  }, [product]);
+
+
+  const modifyProducts = (id) => {
+    HTTP.put(`/api/products/${id}`,formData)
+      .then((response) => {
+        console.log("fetching products" + JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
   };
 
-  const staticCategories = [{ id: 1, title: "Electronics" }]; // example categories
+  const handleCategoryChange = (value) => {
+    setFormData({ ...formData, category: value });
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -43,49 +64,29 @@ const AddProductForm = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const resetForm = () => {
-    setFormData({
-      id: "",
-      name: "",
-      price: "",
-      description: "",
-      category: "",
-      manufacturer: "",
-      availableItems: "",
-      imageUrl: "",
-    });
+
+  const handleUpdate = () => {
+    modifyProducts(formData.id)
+   // dispatch(updateProduct(formData));
   };
 
-  const handleCategoryChange = (value) => {
-    setFormData({ ...formData, category: value });
+  const isFormValid = () => {
+    return (
+      formData.name.trim() !== "" &&
+      formData.price.trim() !== "" &&
+      formData.category.trim() !== "" &&
+      formData.description.trim()!=="" &&
+      formData.manufacturer.trim()!=="" &&
+      formData.availableItems.trim()!=="" &&
+      formData.imageUrl.trim()!==""
+    );
   };
 
-  const addProductHandler = () => {
-    if (isFormValid()) {
-      const newFormData = {
-        ...formData,
-      };
-
-      HTTP
-        .post("http://localhost:8080/api/products", newFormData)
-        .then((response) => {
-          console.log(newFormData);
-          if (response) {
-            dispatch(addProduct(newFormData));
-            resetForm();
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } else {
-      setError("All fields are required.");
-    }
-  };
+  const staticCategories = [{ id: 1, title: "Electronics" }]; // example categories
 
   return (
     <>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    {error && <p style={{ color: "red" }}>{error}</p>}
       <div
         style={{
           display: "flex",
@@ -193,15 +194,17 @@ const AddProductForm = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={addProductHandler}
+              onClick={handleUpdate}
             >
               SAVE PRODUCT
             </Button>
           </Box>
+          
         </div>
+        
       </div>
     </>
   );
 };
 
-export default AddProductForm;
+export default EditProductForm;

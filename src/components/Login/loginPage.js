@@ -7,6 +7,8 @@ import { styled } from "@mui/system";
 import PinkCircleWithLockIcon from "../LockIcon/PinkCircleWithLockIcon";
 import { addToken } from "../../redux/actionTypes/action";
 import { useNavigate } from "react-router-dom";
+import { useAxios } from "../../API/axios";
+
 
 const PageContainer = styled("div")({
   display: "flex",
@@ -28,9 +30,22 @@ const CustomButton = styled(Button)({
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const HTTP = useAxios();
+  // const fetchAndAddProducts = () => {
+   
+   
+  //   HTTP.get("/api/products")
+  //     .then((response) => {
+  //       console.log("fetching products"+JSON.stringify(response.data));
+  //       dispatch({ type: ADD_PRODUCT, payload: response.data[0] });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching products:", error);
+  //     });
+  // };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const requestData = {
@@ -38,12 +53,13 @@ function LoginPage() {
       password: password,
     };
 
+    
     axios
       .post("http://localhost:8080/api/auth/signin", requestData)
       .then((response) => {
         console.log(response);
-        if (response.data.token) {
-          dispatch(addToken(response.data.token));
+        if (response.headers["x-auth-token"]) {
+          dispatch(addToken(response));
           navigate("/products");
         }
       })

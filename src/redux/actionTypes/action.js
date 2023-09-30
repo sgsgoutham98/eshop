@@ -29,3 +29,22 @@ export const addProduct = product => {
     payload: product
   };
 };
+
+export const setProducts = (products) => ({
+  type: 'SET_PRODUCTS',
+  payload: products,
+});
+
+export const updateProduct = (product) => {
+  return {
+    type: "UPDATE_PRODUCT",
+    payload: product,
+  };
+};
+
+export const deleteProduct = (id) => {
+  return {
+    type: "DELETE_PRODUCT",
+    payload: id,
+  };
+};
