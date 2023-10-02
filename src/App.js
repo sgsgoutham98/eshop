@@ -7,7 +7,9 @@ import AddProductForm from './components/Products/addProductPage';
 import AdminSignupComponent from './components/SignUp/adminSignupPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/Home/homePage';
+import BuyProduct from './components/Products/buyProduct';
 import EditProductForm from './components/Products/EditProductPage';
+import PlaceOrder from './components/Products/placeOrder';
 import './App.css';
 function Login() {
     return <><LoginPage/></>
@@ -25,6 +27,12 @@ function Products() {
     return <ProductDisplay/>
 }
 
+function BuyProductPage(){
+    return <BuyProduct/>
+}
+function NavigateToPlaceOrder(){
+    return <PlaceOrder/>
+}
 
 function App() {
     return (
@@ -35,10 +43,12 @@ function App() {
                 <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignupComponent />} />
-                    <Route path="/products" element={<Products/>} />
+                    <Route exact path="/products" element={<Products/>} />
                     <Route path="/addproduct" element={<AddProductForm/>}/>
                     <Route path="/edit-product/:id" element={<EditProductForm />}/>
                     <Route path="/admin/signup" element={<AdminSignupComponent />} />
+                    <Route path="/products/:id" element={<BuyProduct />} />
+                    <Route path="/placeOrder" element={<NavigateToPlaceOrder />} />
                 </Routes>
             </div>
         </Router>

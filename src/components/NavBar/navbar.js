@@ -100,15 +100,10 @@ const Navbar = () => {
 
         {isLoggedIn && (
           <Button
-            color="inherit"
+            color="error"
             to="/login"
             component={Link}
-            sx={{
-              backgroundColor: "pink",
-              "&:hover": {
-                backgroundColor: "pink", // maintain the background color on hover
-              },
-            }}
+            variant="contained" 
             onClick={() => dispatch(removeToken())}
           >
             Logout

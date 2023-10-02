@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { TextField, Button, Typography, Container } from "@mui/material";
 import { Link } from "react-router-dom";
+import PinkCircleWithLockIcon from "../LockIcon/PinkCircleWithLockIcon";
 
 function SignupComponent() {
   const [formData, setFormData] = useState({
@@ -31,12 +32,17 @@ function SignupComponent() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <>
+   
+   <Container component="main" style={{ maxWidth:"400px" ,display: 'flex', flexDirection: 'column', alignItems: 'center',paddingTop:'20px'}}>
+
+    <PinkCircleWithLockIcon/>
       <form onSubmit={handleSubmit}>
         <TextField
           variant="outlined"
           margin="normal"
           required
+          style={{marginBottom: '2px' }}
           fullWidth
           label="First Name"
           name="firstName"
@@ -47,6 +53,7 @@ function SignupComponent() {
           variant="outlined"
           margin="normal"
           required
+          style={{marginBottom: '2px' }}
           fullWidth
           label="Last Name"
           name="lastName"
@@ -58,6 +65,7 @@ function SignupComponent() {
           margin="normal"
           required
           fullWidth
+          style={{marginBottom: '2px' }}
           label="Email Address"
           name="email"
           type="email"
@@ -69,6 +77,7 @@ function SignupComponent() {
           margin="normal"
           required
           fullWidth
+          style={{marginBottom: '2px' }}
           label="Password"
           name="password"
           type="password"
@@ -80,6 +89,7 @@ function SignupComponent() {
           margin="normal"
           required
           fullWidth
+          style={{marginBottom: '2px' }}
           label="Confirm Password"
           name="confirmPassword"
           type="password"
@@ -91,12 +101,13 @@ function SignupComponent() {
           margin="normal"
           required
           fullWidth
+          style={{marginBottom: '2px' }}
           label="Contact Number"
           name="contactNumber"
           value={formData.contactNumber}
           onChange={handleInputChange}
         />
-        <Button type="submit" fullWidth variant="contained" color="primary">
+        <Button type="submit" fullWidth   style={{ paddingTop: '10px !important' }}  variant="contained" color="primary">
           Sign Up
         </Button>
       </form>
@@ -104,6 +115,7 @@ function SignupComponent() {
         Already have an account? <Link to="/login">Sign In</Link>
       </Typography>
     </Container>
+    </>
   );
 }
 

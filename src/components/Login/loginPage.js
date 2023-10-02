@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -8,6 +8,7 @@ import PinkCircleWithLockIcon from "../LockIcon/PinkCircleWithLockIcon";
 import { addToken } from "../../redux/actionTypes/action";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../API/axios";
+import { AlertContext } from "../CustomAlert/alertContext";
 
 
 const PageContainer = styled("div")({
@@ -33,18 +34,7 @@ function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const HTTP = useAxios();
-  // const fetchAndAddProducts = () => {
-   
-   
-  //   HTTP.get("/api/products")
-  //     .then((response) => {
-  //       console.log("fetching products"+JSON.stringify(response.data));
-  //       dispatch({ type: ADD_PRODUCT, payload: response.data[0] });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching products:", error);
-  //     });
-  // };
+  const showAlert = useContext(AlertContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -52,13 +42,19 @@ function LoginPage() {
       username: email,
       password: password,
     };
+    if (email == '' || password == '') {
+      showAlert("Please enter all mandatory fields to proceed.", 'error');
+      return;
+    }
 
     
     axios
       .post("http://localhost:8080/api/auth/signin", requestData)
       .then((response) => {
         console.log(response);
+        showAlert('This is an alert message!', 'success');
         if (response.headers["x-auth-token"]) {
+          localStorage.setItem('x-auth-token', response.headers['x-auth-token'])
           dispatch(addToken(response));
           navigate("/products");
         }

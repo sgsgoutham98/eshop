@@ -1,16 +1,16 @@
-// EditProductForm.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProduct } from "../../redux/actionTypes/action";
 import { TextField, Button, Box, Select, MenuItem } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useAxios } from "../../API/axios";
-
+import { AlertContext } from "../CustomAlert/alertContext";
 
 const EditProductForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const HTTP = useAxios();
+  const showAlert = useContext(AlertContext);
   const product = useSelector((state) => state.allProducts.find((p) => p.id === id));
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -48,6 +48,7 @@ const EditProductForm = () => {
     HTTP.put(`/api/products/${id}`,formData)
       .then((response) => {
         console.log("fetching products" + JSON.stringify(response.data));
+        showAlert(`Product ${formData.name} modified successfully`, 'success');
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
@@ -82,7 +83,14 @@ const EditProductForm = () => {
     );
   };
 
-  const staticCategories = [{ id: 1, title: "Electronics" }]; // example categories
+
+  const staticCategories = [
+    { id: 1, title: "ALL" },
+    { id: 2, title: "APPAREL" },
+    { id: 3, title: "ELECTRONICS" },
+    { id: 4, title: "FOOTWEAR" },
+    { id: 5, title: "PERSONAL CARE" },
+  ];
 
   return (
     <>

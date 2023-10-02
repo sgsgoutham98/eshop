@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -18,13 +18,14 @@ import {
   filterProducts,
   deleteProduct,
   updateProduct,
-  setProducts
+  setProducts,
 } from "../../redux/actionTypes/action";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ADD_PRODUCT,SET_PRODUCTS } from "../../redux/actionTypes/actionTypes";
+import { AlertContext } from "../CustomAlert/alertContext";
+
 
 const ProductDisplay = () => {
   const categories = [
@@ -34,23 +35,25 @@ const ProductDisplay = () => {
     { id: 4, name: "FOOTWEAR" },
     { id: 5, name: "PERSONAL CARE" },
   ];
-  let sortOrder = "";
+
   const dispatch = useDispatch();
   const HTTP = useAxios();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const isAdmin = useSelector((state) => state.isAdmin);
+  const showAlert = useContext(AlertContext);
   let filteredProducts = useSelector((state) => state.filteredProducts);
+  const [sortOrder, setSortOrder] = useState("");
 
   const handleToggleTab = (event, newCategory) => {
     dispatch(filterProducts(newCategory));
   };
 
-  const fetchAndAddProducts = async() => {
-   await HTTP.get("/api/products")
+  const fetchAndAddProducts = async () => {
+    await HTTP.get("/api/products")
       .then((response) => {
-        console.log("Before dispatch"+JSON.stringify(response.data));
+        console.log("Before dispatch" + JSON.stringify(response.data));
         dispatch(setProducts(response.data));
-        console.log("After dispatch")
+        console.log("After dispatch");
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
@@ -59,56 +62,42 @@ const ProductDisplay = () => {
 
   const navigate = useNavigate();
   const handleEdit = (id) => {
-    // Your code to handle edit.
-    // For example, redirect to the EditProductForm component with the product ID as a parameter.
-
     navigate(`/edit-product/${id}`);
   };
 
-  const handleDelete = (id) => {
-    // Your code to handle delete.
-    // For example, dispatch an action to remove the product from the store.
-
+  const handleDelete = (name,id) => {
     HTTP.delete(`/api/products/${id}`)
-    .then((response) => {
-      dispatch(deleteProduct(id));
-    })
-    .catch((error) => {
-      console.error("Error fetching products:", error);
-    });
-   
+      .then((response) => {
+        dispatch(deleteProduct(id));
+        showAlert(`Product ${name} deleted successfully`, 'success');
+        
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
   };
   useEffect(() => {
-    console.log("RUnning useEffect")
+    console.log("RUnning useEffect");
     fetchAndAddProducts();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(filterProducts("ALL"));
-  // }, []);
-  //const ProductList=products
-  // useEffect(() => {
-  //   //axios.get("/products/categories").then((response) => {});
-  // }, []);
+  const handleSortChange = (event) => {
+    const newSortOrder = event.target.value;
+    let sortedProducts = [...filteredProducts]; // Make a copy of the filteredProducts
 
-  // useEffect(() => {
-  //   axios.get("/products").then((response) => {
-  //     let sortedProducts = [...response.data];
-  //     if (sortOrder === "priceHighToLow") {
-  //       sortedProducts.sort((a, b) => b.price - a.price);
-  //     } else if (sortOrder === "priceLowToHigh") {
-  //       sortedProducts.sort((a, b) => a.price - b.price);
-  //     } else if (sortOrder === "newest") {
-  //       sortedProducts.sort((a, b) => new Date(b.date) - new Date(a.date));
-  //     }
-  //     // TO-DO
-  //   });
-  // }, [sortOrder]);
+    if (newSortOrder === "Price: High to Low") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    } else if (newSortOrder === "Price: Low to High") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (newSortOrder === "Newest") {
+      sortedProducts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
 
-  const handleSortChange = (event, newSortOrder) => {
-    console.log("clciked " + sortOrder);
-    sortOrder = event.target.value;
-    console.log("clciked " + sortOrder);
+    dispatch(setProducts(sortedProducts));
+  };
+
+  const handleBuy = (id) => {
+    navigate(`/products/${id}`);
   };
 
   return (
@@ -131,7 +120,10 @@ const ProductDisplay = () => {
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px",textAlign: 'left',padding:'10px'  }}>
+        <Typography variant="body1" style={{ marginBottom: "5px" }}>
+          Sort By:
+        </Typography>
         <FormControl
           fullWidth
           variant="outlined"
@@ -142,11 +134,11 @@ const ProductDisplay = () => {
             displayEmpty
             value={sortOrder}
             onChange={handleSortChange}
-            //defaultValue="Select..."
             renderValue={(value) => {
-              return sortOrder == "" ? "Select..." : sortOrder;
+              return sortOrder === "" ? "Select..." : sortOrder;
             }}
           >
+            <MenuItem value="default">Default</MenuItem>
             <MenuItem value="Price: High to Low">Price: High to Low</MenuItem>
             <MenuItem value="Price: Low to High">Price: Low to High</MenuItem>
             <MenuItem value="Newest">Newest</MenuItem>
@@ -169,23 +161,52 @@ const ProductDisplay = () => {
                   />
                   <CardContent
                     style={{
+                      display: "flex",
+                      flexDirection: "column", // stack content vertically
                       height: "90px",
                       maxHeight: "100px",
                       overflow: "auto",
                     }}
                   >
-                    <Typography gutterBottom variant="h5" component="div">
-                      {product.name}
-                    </Typography>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {product.name}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        ₹{product.price || ""}
+                      </Typography>
+                    </div>
                     <Typography variant="body2" color="text.secondary">
                       {product.description}
                     </Typography>
                   </CardContent>
+
                   <CardActions style={{ position: "relative" }}>
                     <Button
                       size="small"
                       variant="contained"
                       style={{ background: "#3f51b5" }}
+                      onClick={(e) => handleBuy(product.id)}
                     >
                       Buy
                     </Button>
@@ -214,7 +235,7 @@ const ProductDisplay = () => {
                               color: "#757575",
                               justifyContent: "flex-end",
                             }}
-                            onClick={(e) => handleDelete(product.id)}
+                            onClick={(e) => handleDelete(product.name,product.id)}
                           />
                         </div>
                       </>

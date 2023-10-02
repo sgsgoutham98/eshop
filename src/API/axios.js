@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 export const useAxios = () => {
-  const token = useSelector((state) => state.token);
+  const token = localStorage.getItem('x-auth-token') || useSelector((state) => state.token)
 
   useEffect(() => {
     axios.defaults.baseURL = 'http://localhost:8080';

@@ -11,33 +11,8 @@ const initialState = {
   products: [],
   productsSortOrder: "default",
   isAdmin: true,
-  allProducts: [
-    // {
-    //   id: 1,
-    //   name: "Mobile",
-    //   price: 1000,
-    //   description:
-    //     "The iPhone 14 features a 6.1-inch (155 mm) display with Super Retina XDR OLED technology at a resolution of 2532 × 1170 pixels and a pixel density of about 460 PPI with a refresh rate of 60 Hz. ",
-    //   category: "Electronics",
-    //   manufacturer: "Apple",
-    //   availableItems: 10,
-    //   imageUrl:
-    //     "https://media.istockphoto.com/id/1371695315/photo/iphone-13-pro-sierra-blue.jpg?s=612x612&w=0&k=20&c=-0Mr9DdIRHFoLUozdltlHdkum0ChCNTGfLhxc-3oHmI=",
-    // },
-    // {
-    //   id: 2,
-    //   name: "Laptop",
-    //   price: 2000,
-    //   description:
-    //     "Dell Inspiron is a Windows 10 laptop with a 15.60-inch display that has a resolution of 1920x1080 pixels. It is powered by a APU Quad Core A6 processor ",
-    //   category: "Electronics",
-    //   manufacturer: "Dell",
-    //   availableItems: 10,
-    //   imageUrl:
-    //     "https://www.reliancedigital.in/medias/Dell-5520-Laptops-492850230-i-3-1200Wx1200H?context=bWFzdGVyfGltYWdlc3w0MzEyMDd8aW1hZ2UvanBlZ3xpbWFnZXMvaDRlL2gyYi85ODQ0NTM0MTQ5MTUwLmpwZ3w0YmU2YmYwMjM5NDQ0MGM1YmExNTY2NjdiNGIzNDVkZGFkMDYxYjczMDJhOTRhY2EzNDU0MmRkZjhlNDRiNTVi",
-    // },
-  ], // all products
-  filteredProducts: [] // filtered products
+  allProducts: [],
+  filteredProducts: []
 };
 
 const cartReducer = (state = initialState, action) => {

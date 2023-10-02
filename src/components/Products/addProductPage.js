@@ -1,4 +1,3 @@
-// AddProductForm.js
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../redux/actionTypes/action";
@@ -35,7 +34,13 @@ const AddProductForm = () => {
     );
   };
 
-  const staticCategories = [{ id: 1, title: "Electronics" }]; // example categories
+  const staticCategories = [
+    { id: 1, title: "ALL" },
+    { id: 2, title: "APPAREL" },
+    { id: 3, title: "ELECTRONICS" },
+    { id: 4, title: "FOOTWEAR" },
+    { id: 5, title: "PERSONAL CARE" },
+  ];
 
   const handleChange = (e) => {
     setFormData({
