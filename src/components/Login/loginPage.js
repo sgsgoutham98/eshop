@@ -52,7 +52,7 @@ function LoginPage() {
       .post("http://localhost:8080/api/auth/signin", requestData)
       .then((response) => {
         console.log(response);
-        showAlert('This is an alert message!', 'success');
+        showAlert('Login successful', 'success');
         if (response.headers["x-auth-token"]) {
           localStorage.setItem('x-auth-token', response.headers['x-auth-token'])
           dispatch(addToken(response));
