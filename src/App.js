@@ -45,7 +45,7 @@ function App() {
                     <Route path="/signup" element={<SignupComponent />} />
                     <Route exact path="/products" element={<Products/>} />
                     <Route path="/addproduct" element={<AddProductForm/>}/>
-                    <Route path="/edit-product/:id" element={<EditProductForm />}/>
+                    <Route path="/product/:id" element={<EditProductForm />}/>
                     <Route path="/admin/signup" element={<AdminSignupComponent />} />
                     <Route path="/products/:id" element={<BuyProduct />} />
                     <Route path="/placeOrder" element={<NavigateToPlaceOrder />} />

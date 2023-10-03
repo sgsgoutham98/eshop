@@ -62,7 +62,7 @@ const ProductDisplay = () => {
 
   const navigate = useNavigate();
   const handleEdit = (id) => {
-    navigate(`/edit-product/${id}`);
+    navigate(`/product/${id}`);
   };
 
   const handleDelete = (name,id) => {

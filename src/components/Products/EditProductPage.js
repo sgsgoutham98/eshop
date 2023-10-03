@@ -12,6 +12,8 @@ const EditProductForm = () => {
   const HTTP = useAxios();
   const showAlert = useContext(AlertContext);
   const product = useSelector((state) => state.allProducts.find((p) => p.id === id));
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const isAdmin = useSelector((state) => state.isAdmin);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     id: product.id,
@@ -20,8 +22,8 @@ const EditProductForm = () => {
     availableItems:product.availableItems,
     imageUrl:product.imageUrl,
     category:product.category,
+    description:product.description,
     price:product.price,
-    description:product.description
   });
 
   useEffect(() => {
@@ -102,7 +104,7 @@ const EditProductForm = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ width: "fit-content", marginTop: "5px" }}>
+         {isLoggedIn && isAdmin} && <div style={{ width: "fit-content", marginTop: "5px" }}>
           <Box>
             <div
               style={{
