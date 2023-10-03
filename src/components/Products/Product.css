@@ -1,0 +1,24 @@
+/* Flex row with centered content */
+.flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .justify-content-center {
+    justify-content: center;
+  }
+  
+  /* Flex column with centered content and items aligned at the start */
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .align-items-start {
+    align-items: flex-start;
+  }
+  
+  .align-items-baseline {
+    align-items: baseline;
+  }
+  
